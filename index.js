@@ -131,11 +131,12 @@ bot.on('message', async (msg) => {
     const telegramId = user.id;
     const text = msg.text;
 
+
     if (text === '/start') {
         const data = {"last_name":user.last_name, "username":user.username, "id":telegramId, "text":"Данные"};
         await addUserToDb(telegramId, data);
-        // bot.sendMessage(telegramId, `Привет! Данные о вас сохранены.
-        // \n Имя: ${user.first_name || ''}, Фамилия: ${user.last_name || ''}, Юзернейм: ${user.username || ''}, id_tg: ${telegramId}` );
+        bot.sendMessage(telegramId, `Привет! Данные о вас сохранены.
+        \n Имя: ${user.first_name || ''}, Фамилия: ${user.last_name || ''}, Юзернейм: ${user.username || ''}, id_tg: ${telegramId}` );
     }
 
 });
