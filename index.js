@@ -12,7 +12,7 @@ app.use(express.json());
 const PORT = process.env.PORT || 3000;
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const DATABASE_URL = process.env.DATABASE_URL;
-
+const webAppUrl = "https://t.me/test_db29_bot/schedule";
 
 // Функция для подключения к БД
 async function getDbConnection() {
@@ -92,6 +92,7 @@ async function getUserDataByTelegramId(telegramId) {
     }
 }
 
+// Endpoint для получения данных из бд
 app.get('/api/users', async (req, res) => {
     try {
         const users = await getAllDataFromTable('users');
@@ -131,13 +132,21 @@ bot.on('message', async (msg) => {
     const telegramId = user.id;
     const text = msg.text;
 
-
     if (text === '/start') {
         const data = {"last_name":user.last_name, "username":user.username, "id":telegramId, "text":"Данные"};
         await addUserToDb(telegramId, data);
         bot.sendMessage(telegramId, `Привет! Данные о вас сохранены.
         \n Имя: ${user.first_name || ''}, Фамилия: ${user.last_name || ''}, Юзернейм: ${user.username || ''}, id_tg: ${telegramId}` );
+        bot.sendMessage(telegramId, 'Заходи в наш интернет магазин по кнопке ниже', {
+            reply_markup: {
+                inline_keyboard: [
+                    [{text: 'Сделать заказ', web_app: {url: webAppUrl}}]
+                ]
+            }
+        });
+
     }
+
 
 });
 
